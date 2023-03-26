@@ -13,13 +13,13 @@
 
             //Check which radio button is selected, send GET based on this info
             if (cat == "artist") {
-                xhttp.open("GET", "http://127.0.0.1:5000/songsByArtist?artist_name=" + url, true);
+                xhttp.open("GET", "http://localhost:5000/songsByArtist?artist_name=" + url, true);
             }
             else if (cat == "title") {
-                xhttp.open("GET", "http://127.0.0.1:5000/songsByTitle?song_name=" + url, true);
+                xhttp.open("GET", "http://localhost:5000/songsByTitle?song_name=" + url, true);
             }
             else if (cat == "album") {
-                xhttp.open("GET", "http://172.0.0.1:5000/songsByAlbum?album_name=" + url, true);
+                xhttp.open("GET", "http://localhost:5000/songsByAlbum?album_name=" + url, true);
             }
 
             //Runs once the request recieves a response
@@ -37,13 +37,31 @@
                     //If parsed data array has more than 3 values, loop through array and create rows in output table
                     if (dataArray.length > 3) {
                         dataArray.forEach(item => {
-                            console.log(typeof item);
 
                             //Create rows and cells in output table
                             const row = document.createElement('tr');
                             const titleCell = document.createElement('td');
                             const artistCell = document.createElement('td');
                             const albumCell = document.createElement('td');
+                            const updateCell = document.createElement('td');
+                            const updateButton = document.createElement('button');
+
+                            //Creates an edit button with an array containing the correcponding row data 
+                            updateButton.addEventListener("click", function() {
+                                const myArray = [item.song_name, item.artist_name, item.album_name];
+                                const encodedValue = encodeURIComponent(JSON.stringify(myArray));
+                                if (cat == "title") {
+                                    const updateUrl = 'updateSong.html?data=' + encodedValue;
+                                }
+                                else if (cat == "artist") {
+                                    const updateUrl = 'updateArtist.html?data=' + encodedValue;
+                                }
+                                else if (cat == "album") {
+                                    const updateUrl = 'updateAlbum.html?data=' + encodedValue;
+                                }
+                                
+                                window.location.href = updateUrl;
+                            });
 
                             const newRow = tableBody.insertRow();
 
@@ -51,10 +69,13 @@
                             titleCell.textContent = item.song_name;
                             artistCell.textContent = item.artist_name;
                             albumCell.textContent = item.album_name;
+                            updateButton.textContent = "Edit";
 
                             row.appendChild(titleCell);
                             row.appendChild(artistCell);
                             row.appendChild(albumCell);
+                            row.appendChild(updateCell);
+                            updateCell.appendChild(updateButton);
 
                             tableBody.appendChild(row);
                             //console.log('success1');
@@ -85,7 +106,6 @@
             xhttp.send();
         }
     </script>
-
 </head>
 
 <body>
@@ -112,6 +132,9 @@
         <label for="artist">Album</label>
         <input type="radio" id="album" name="searchCat" value="album">
     </form>
+
+    <!-- Feedback from server if any -->
+    <p id="feedback"></p>
 
     <!-- Table for results -->
     <div id="results">
