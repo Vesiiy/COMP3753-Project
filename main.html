@@ -12,14 +12,13 @@
             const xhttp = new XMLHttpRequest();
 
             //Check which radio button is selected, send GET based on this info
-            if (cat == "artist") {
+
                 xhttp.open("GET", "http://localhost:5000/songsByArtist?artist_name=" + url, true);
             }
             else if (cat == "title") {
                 xhttp.open("GET", "http://localhost:5000/songsByTitle?song_name=" + url, true);
             }
             else if (cat == "album") {
-                xhttp.open("GET", "http://localhost:5000/songsByAlbum?album_name=" + url, true);
             }
 
             //Runs once the request recieves a response
