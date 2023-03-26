@@ -11,6 +11,7 @@
             const cat = document.querySelector('input[name="searchCat"]:checked').value;
             const xhttp = new XMLHttpRequest();
 
+            //Check which radio button is selected, send GET based on this info
             if (cat == "artist") {
                 xhttp.open("GET", "http://127.0.0.1:5000/songsByArtist?artist_name=" + url, true);
             }
@@ -21,6 +22,7 @@
                 xhttp.open("GET", "http://172.0.0.1:5000/songsByAlbum?album_name=" + url, true);
             }
 
+            //Runs once the request recieves a response
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     const jsonString = this.responseText;
@@ -28,13 +30,16 @@
                     const dataArray = Object.values(parseData);
                     console.log(dataArray);
 
+                    //Create table body / clear prior searches 
                     const tableBody = document.getElementById("resultTable").getElementsByTagName('tbody')[0];
                     tableBody.innerHTML = '';
 
+                    //If parsed data array has more than 3 values, loop through array and create rows in output table
                     if (dataArray.length > 3) {
                         dataArray.forEach(item => {
                             console.log(typeof item);
 
+                            //Create rows and cells in output table
                             const row = document.createElement('tr');
                             const titleCell = document.createElement('td');
                             const artistCell = document.createElement('td');
@@ -42,6 +47,7 @@
 
                             const newRow = tableBody.insertRow();
 
+                            //Add values to new row
                             titleCell.textContent = item.song_name;
                             artistCell.textContent = item.artist_name;
                             albumCell.textContent = item.album_name;
@@ -54,12 +60,15 @@
                             //console.log('success1');
                         });
                     }
+                    //If parsed data has less than 3 values, create single row in output table
                     else {
+                        //Create rows and cells in output table
                         const row = document.createElement("tr");
                         const titleCell = document.createElement("td");
                         const artistCell = document.createElement("td");
                         const albumCell = document.createElement("td");
 
+                        //Add values to new row
                         titleCell.textContent = item.song_name;
                         artistCell.textContent = item.artist_name;
                         albumCell.textContent = item.album_name;
@@ -74,7 +83,6 @@
                 };
             };
             xhttp.send();
-
         }
     </script>
 
@@ -82,16 +90,18 @@
 
 <body>
 
-    <h1>Personalized Music Database</h1>
+    <h1>Personalized Music Database: Home</h1>
 
+    <!-- Top nav bar -->
     <div id="topnav">
-        <a href="#home-page">Home</a>
-        <a href="#create-page">Create</a>
-        <a href="#update-page?">Update</a>
+        <a href="main.html">Home</a>
+        <a href="create.html">Create</a>
+        <a href="update.html">Update</a>
     </div>
 
     <hr />
 
+    <!-- Searchbar and radio options  -->
     <form onsubmit="makeGetRequest(); return false;">
         <input type="submit" value="Submit">
         <input type="text" placeholder="Search . . . " id="search" name="search">
@@ -103,6 +113,7 @@
         <input type="radio" id="album" name="searchCat" value="album">
     </form>
 
+    <!-- Table for results -->
     <div id="results">
         <table id="resultTable">
             <thead id="resultHead">
