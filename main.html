@@ -12,13 +12,13 @@
             const xhttp = new XMLHttpRequest();
 
             if (cat == "artist") {
-                xhttp.open("GET", "http://127.0.0.1:5000/songsByArtist?artist_name=" + url, true);
+                xhttp.open("GET", "http://dbproject.nogorogo.ca:5000/songsByArtist?artist_name=" + url, true);
             }
             else if (cat == "title") {
-                xhttp.open("GET", "http://127.0.0.1:5000/songsByTitle?song_name=" + url, true);
+                xhttp.open("GET", "http://dbproject.nogorogo.ca:5000/songsByTitle?song_name=" + url, true);
             }
             else if (cat == "album") {
-                xhttp.open("GET", "http://172.0.0.1:5000/songsByAlbum?album_name=" + url, true);
+                xhttp.open("GET", "http://dbproject.nogorogo.ca:5000/songsByAlbum?album_name=" + url, true);
             }
 
             xhttp.onreadystatechange = function () {
