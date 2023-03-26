@@ -11,12 +11,27 @@ body {
 #topnav a {
     float: left;
     display: block;
+    margin-left: 10%;
+    margin-right: 10%;
     color: black;
     text-decoration: none;
     padding: 2%;
 }
 
 #topnav a:hover {
+    background-color: #a6a6a6;
+    color: black;
+}
+
+.pgOps a {
+    float: left;
+    display: block;
+    color: black;
+    text-decoration: none;
+    padding: 2%;
+}
+
+.pgOps a:hover {
     background-color: #a6a6a6;
     color: black;
 }
