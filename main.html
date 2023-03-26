@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>PMDB: Home</title>
+
+    <script>
+        function makeGetRequest() {
+            const url = document.getElementById("search").value;
+            const cat = document.querySelector('input[name="searchCat"]:checked').value;
+            const xhttp = new XMLHttpRequest();
+
+            if (cat == "artist") {
+                xhttp.open("GET", "http://127.0.0.1:5000/songsByArtist?artist_name=" + url, true);
+            }
+            else if (cat == "title") {
+                xhttp.open("GET", "http://127.0.0.1:5000/songsByTitle?song_name=" + url, true);
+            }
+            else if (cat == "album") {
+                xhttp.open("GET", "http://172.0.0.1:5000/songsByAlbum?album_name=" + url, true);
+            }
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const jsonString = this.responseText;
+                    const parseData = JSON.parse(jsonString);
+                    const dataArray = Object.values(parseData);
+                    console.log(dataArray);
+
+                    const tableBody = document.getElementById("resultTable").getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = '';
+
+                    if (dataArray.length > 3) {
+                        dataArray.forEach(item => {
+                            console.log(typeof item);
+
+                            const row = document.createElement('tr');
+                            const titleCell = document.createElement('td');
+                            const artistCell = document.createElement('td');
+                            const albumCell = document.createElement('td');
+
+                            const newRow = tableBody.insertRow();
+
+                            titleCell.textContent = item.song_name;
+                            artistCell.textContent = item.artist_name;
+                            albumCell.textContent = item.album_name;
+
+                            row.appendChild(titleCell);
+                            row.appendChild(artistCell);
+                            row.appendChild(albumCell);
+
+                            tableBody.appendChild(row);
+                            //console.log('success1');
+                        });
+                    }
+                    else {
+                        const row = document.createElement("tr");
+                        const titleCell = document.createElement("td");
+                        const artistCell = document.createElement("td");
+                        const albumCell = document.createElement("td");
+
+                        titleCell.textContent = item.song_name;
+                        artistCell.textContent = item.artist_name;
+                        albumCell.textContent = item.album_name;
+
+                        row.appendChild(titleCell);
+                        row.appendChild(artistCell);
+                        row.appendChild(albumCell);
+
+                        tableBody.appendChild(row);
+                        //console.log("success2");
+                    }
+                };
+            };
+            xhttp.send();
+
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <h1>Personalized Music Database</h1>
+
+    <div id="topnav">
+        <a href="#home-page">Home</a>
+        <a href="#create-page">Create</a>
+        <a href="#update-page?">Update</a>
+    </div>
+
+    <hr />
+
+    <form onsubmit="makeGetRequest(); return false;">
+        <input type="submit" value="Submit">
+        <input type="text" placeholder="Search . . . " id="search" name="search">
+        <label for="title">Title</label>
+        <input type="radio" id="title" name="searchCat" value="title" checked>
+        <label for="artist">Artist</label>
+        <input type="radio" id="artist" name="searchCat" value="artist">
+        <label for="artist">Album</label>
+        <input type="radio" id="album" name="searchCat" value="album">
+    </form>
+
+    <div id="results">
+        <table id="resultTable">
+            <thead id="resultHead">
+                <tr>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th>Album</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
