@@ -8,15 +8,22 @@
     <script>
         function makePostRequest() {
             event.preventDefault();
+
+            //Create element containing data from form. Convert data into JSON string.
             const formContainer = document.getElementById('songForm');
             const formElem = new FormData(formContainer);
             const data = Object.fromEntries(formElem.entries());
             const jsonString = JSON.stringify(data);
             console.log(jsonString);
 
+            const f1 = getElementById('title').value;
+            const f2 = getElementById('artist').value;
+            const f3 = getElementById('album').value;
+
+            //Create POST request, sends server JSON string
             const xhttp = new XMLHttpRequest();
             //ADD SUBMIT URL
-            xhttp.open("POST", "url-place-holder", true);
+            xhttp.open("POST", "http://localhost:5000/addSong?&song_name=" + f1 + "&artist_name=" + f2 + "&album_name=" + f3, true);
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("feedback").innerHTML = this.responseText;
@@ -41,7 +48,7 @@
 
     <hr />
 
-    <!-- Form fields -->
+    <!-- Create form: fields -->
     <form id="songForm" onsubmit="makePostRequest(); return false;">
         <label for="title">Title:  </label>
         <input type="text" id="title" name="title">
@@ -58,6 +65,7 @@
         <input type="submit" value="Submit">
     </form>
 
+    <!-- Feedback from server if any -->
     <p id="feedback"></p>
 
 </body>
