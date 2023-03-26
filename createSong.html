@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>PMDB: Create-Song</title>
+
+    <script>
+        function makePostRequest() {
+            event.preventDefault();
+            const formContainer = document.getElementById('songForm');
+            const formElem = new FormData(formContainer);
+            const data = Object.fromEntries(formElem.entries());
+            const jsonString = JSON.stringify(data);
+            console.log(jsonString);
+
+            const xhttp = new XMLHttpRequest();
+            //ADD SUBMIT URL
+            xhttp.open("POST", "url-place-holder", true);
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("feedback").innerHTML = this.responseText;
+                }
+            };
+            xhttp.send(jsonString);
+        }
+        
+    </script>
+</head>
+
+<body>
+
+    <!-- Top nav bar -->
+    <h1>Personalized Music Database: Create</h1>
+
+    <div id="topnav">
+        <a href="main.html">Home</a>
+        <a href="create.html">Create</a>
+        <a href="update.html">Update</a>
+    </div>
+
+    <hr />
+
+    <!-- Form fields -->
+    <form id="songForm" onsubmit="makePostRequest(); return false;">
+        <label for="title">Title:  </label>
+        <input type="text" id="title" name="title">
+        <br/><br/>
+        <label for="artist">Artist:  </label>
+        <input type="text" id="artist" name="artist">
+        <br/><br/>
+        <label for="album">Album:  </label>
+        <input type="text" id="album" name="album">
+        <br/><br/>
+        <label for="playlist">Playlist:  </label>
+        <input type="text" id="playlist" name="playlist">
+        <br/><br/><br/>
+        <input type="submit" value="Submit">
+    </form>
+
+    <p id="feedback"></p>
+
+</body>
+
+</html>
